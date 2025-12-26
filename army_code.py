@@ -1,30 +1,29 @@
 # Define the sentences to search for and their corresponding colors
 search_terms = {
     "Club Penguin Armies": "#87d1ff",
-    "CPA Battleground": "#dd2100",
-    "Club Penguin Army Judges": "#ca2244",
-    "Water Vikings": "#000080",
-    "Army of Club Penguin": "#008000",
-    "Elite Guardians of Club Penguin": "grey",
+    "CPA Battleground": "#ff4d4d",  # Ajustei para um vermelho mais brilhante (legivel)
+    "Club Penguin Army Judges": "#ff3366", # Ajuste para neon
+    "Water Vikings": "#3366ff",     # Azul mais claro para aparecer no fundo escuro
+    "Army of Club Penguin": "#00cc00", # Verde mais brilhante
+    "Elite Guardians of Club Penguin": "#a0a0a0", # Cinza claro
     "Special Weapons and Tactics": "#00ff00",
-    "Silver Empire": "white",
-    "People's Imperial Confederation": "#333399",
-    "Dark Pirates": "#800000",
-    "Templars": "#ffcc00",
-    "Rebel Penguin Federation": "#000000",
-    "Winged Hussars": "#ff0000",
-    "Help Force": "#0000ff",
-    "Smart Penguins": "red",
-    "Warlords of Kosmos": "black",
-    "Freeland" : "grey"
+    "Silver Empire": "#ffffff",
+    "People's Imperial Confederation": "#6666ff",
+    "Dark Pirates": "#ff3333",
+    "Templars": "#ffdd33", # Amarelo mais brilhante
+    "Rebel Penguin Federation": "#ffffff", # MUDANÇA CRÍTICA: RPF de Preto para Branco na lista (ou usa cinza #444 se quiseres escuro, mas branco é melhor)
+    "Winged Hussars": "#ff3333",
+    "Help Force": "#3333ff",
+    "Smart Penguins": "#ff5555",
+    "Warlords of Kosmos": "#cccccc", # Mudado de preto para cinza claro
+    "Freeland" : "#888888"
 }
 
 # Open the file in read mode
 with open('map.js', 'r') as file:
-    # Read the content of the file
     content = file.read()
 
-# Initialize the HTML content with Custom CSS for the Dashboard
+# Initialize HTML with enhanced CSS for Dark Mode
 html_content = """
 <html>
 <head>
@@ -32,67 +31,71 @@ html_content = """
 <style>
     body {
         background: transparent;
-        color: #e0e6ed;
+        color: #e0e6ed; /* Texto base claro */
         font-family: 'Rajdhani', sans-serif;
         margin: 0;
-        padding: 10px;
+        padding: 5px;
+        /* Scrollbar fina para ficar bonito */
+        scrollbar-width: thin;
+        scrollbar-color: #00f3ff transparent;
     }
-    /* Estilo do Cartão de Exército */
-    .army-card {
-        margin: 6px 0;
-        padding: 10px 15px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 4px;
-        border-left: 4px solid #fff; /* Cor padrão, substituída inline */
+    
+    .army-row {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        margin-bottom: 6px;
+        background: rgba(25, 30, 50, 0.6); /* Fundo semi-transparente em cada item */
+        border-left: 4px solid #fff; /* A cor vai aqui via inline style */
+        border-radius: 0 4px 4px 0; /* Cantos arredondados na direita */
         transition: all 0.2s ease;
-        cursor: default;
     }
-    .army-card:hover {
-        background: rgba(255, 255, 255, 0.08);
-        transform: translateX(3px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+    .army-row:hover {
+        background: rgba(40, 50, 80, 0.8);
+        transform: translateX(2px);
     }
+
     .army-name {
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        font-weight: 600;
         letter-spacing: 0.5px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Sombra para leitura perfeita */
     }
-    .territory-count {
-        background: rgba(255,255,255,0.1);
+
+    .count-badge {
+        background: rgba(0,0,0,0.4);
         padding: 2px 8px;
-        border-radius: 10px;
+        border-radius: 4px;
         font-size: 0.8rem;
-        color: #fff;
+        color: #aaa;
+        border: 1px solid rgba(255,255,255,0.05);
     }
 </style>
 </head>
 <body>
 """
 
-# Iterate over the search terms
+# Iterate and Generate
 for term, color in search_terms.items():
-    # Count the occurrences of the term in the content
+    # Count occurrences
     count = content.lower().count(term.lower()) - 1
 
-    # If the term appears more than once
     if count >= 1:
-        # Add a line to the HTML content using the new classes
-        # Usamos 'color' tanto para o texto quanto para a borda esquerda
+        # AQUI ESTÁ O TRUQUE:
+        # 1. border-left-color: usa a cor do exército para identificação.
+        # 2. color: usa a cor do exército para o NOME também (mas usei versões mais claras no dicionário acima).
+        #    Se preferir texto sempre branco, mude style="color: {color}" para style="color: #fff".
         html_content += f'''
-        <div class="army-card" style="border-left-color: {color};">
+        <div class="army-row" style="border-left-color: {color};">
             <span class="army-name" style="color: {color};">{term}</span>
-            <span class="territory-count">{count}</span>
+            <span class="count-badge">{count}</span>
         </div>
         '''
 
-# Close the HTML tags
 html_content += "</body></html>"
 
-# Write the HTML content to "army_code.html"
 with open("army_code.html", 'w') as file:
     file.write(html_content)
+print("army_code.html updated successfully with Dark Mode styles.")
