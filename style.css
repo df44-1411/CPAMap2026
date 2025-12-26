@@ -1,131 +1,216 @@
-/* style.css - CORRIGIDO */
+/* style.css - Modern CPA Map Design */
+:root {
+    --bg-dark: #050510;
+    --panel-bg: rgba(20, 25, 40, 0.85);
+    --neon-blue: #00f3ff;
+    --neon-green: #00ff9d;
+    --text-main: #e0e6ed;
+    --text-muted: #94a3b8;
+    --border-color: rgba(0, 243, 255, 0.3);
+}
 
-/* 1. RESET E FUNDO GLOBAL */
 body {
-    background-color: #050510;
     margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    /* Padrão de Grelha Tática no Fundo */
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
     font-family: 'Rajdhani', sans-serif;
-    color: #e0e6ed;
+    color: var(--text-main);
     height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; /* Evita scroll na página inteira, apenas no mapa se necessário */
 }
 
-/* 2. FORÇAR A GRID A APARECER */
-/* O segredo é garantir que o fundo do container do mapa seja transparente */
-#container, .highcharts-container {
-    background: transparent !important;
-    background-color: transparent !important;
-}
-
-/* O Wrapper segura a Grid */
-.map-wrapper {
-    flex: 3;
-    position: relative;
-    border: 1px solid rgba(0, 243, 255, 0.3);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    
-    /* A GRID TÁTICA */
-    background-color: #001525; /* Azul muito escuro base */
-    background-image: 
-        linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-}
-
-/* 3. STATUS DOT CORRIGIDO */
-.map-header {
-    padding: 10px 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #00ff9d; /* Texto Verde */
-}
-
-.status-dot {
-    width: 10px;
-    height: 10px;
-    background-color: #00ff9d; /* Bolinha Verde */
-    border-radius: 50%;
-    box-shadow: 0 0 10px #00ff9d; /* Brilho Neon */
-    display: inline-block;
-}
-
-/* 4. SIDEBAR E IFRAME */
-.sidebar {
-    flex: 1;
-    min-width: 300px;
-    background: rgba(15, 20, 30, 0.95);
-    border: 1px solid rgba(0, 243, 255, 0.2);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    margin-left: 20px;
-}
-
-.sidebar-header {
-    padding: 15px 20px;
-    background: rgba(0, 243, 255, 0.05);
-    border-bottom: 1px solid rgba(0, 243, 255, 0.1);
-}
-
-.sidebar h2 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* NAV e LAYOUT GERAL (Mantenha igual) */
-.dashboard-container {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-    height: calc(100vh - 60px);
-}
-
+/* --- Navigation --- */
 .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
-    height: 60px;
-    background: rgba(10, 10, 20, 0.9);
-    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    height: 70px;
+    background: rgba(10, 10, 20, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+    z-index: 1000;
 }
 
 .logo-section h1 {
-    color: #fff;
-    margin: 0;
     font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    background: linear-gradient(90deg, #fff, var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
 }
 
 .nav-links a {
-    color: #aaa;
     text-decoration: none;
-    margin-left: 20px;
+    color: var(--text-muted);
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
 }
 
-.nav-links a.active {
-    color: #00f3ff;
+.nav-links a:hover, .nav-links a.active {
+    color: var(--neon-blue);
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+/* --- Main Layout --- */
+.dashboard-container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
+    height: calc(100vh - 70px); /* Restante da altura */
+    box-sizing: border-box;
+}
+
+/* Mapa Container (O "Cartão" Central) */
+.map-wrapper {
+    flex: 3; /* Ocupa 3/4 do espaço */
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Headerzinho do Mapa */
+.map-header {
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--neon-green);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-green);
+}
+
+/* Área onde o Mapa do Highcharts/Leaflet vai viver */
+#map-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: transparent; /* Deixa a grid do body aparecer levemente se o mapa for transparente */
+}
+
+/* --- Sidebar (Leaderboard) --- */
+.sidebar {
+    flex: 1; /* Ocupa 1/4 do espaço */
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Exemplo de Cartão de Exército na Sidebar */
+.army-card {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid transparent;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.army-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--neon-blue);
+}
+
+.army-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.progress-bar-bg {
+    background: rgba(255,255,255,0.1);
+    height: 6px;
+    border-radius: 3px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--neon-green);
+    width: 70%; /* Exemplo */
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+/* --- Painel Flutuante (Army Codes/Legend) --- */
+/* Estilo para substituir o painel cinza antigo */
+.floating-panel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: rgba(15, 20, 30, 0.95);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    color: #fff;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.panel-header {
+    background: rgba(0, 243, 255, 0.1);
+    padding: 10px 15px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    cursor: move; /* Se for arrastável */
 }
