@@ -1,34 +1,102 @@
-<!-- HTML HEADER FOR THE CPA MAP
-
-MAP DESIGN AND HIGHCHARTS DEVELOPMENT: df44 (Discord:.df44) (c) 2024 All Rights Reserved
-
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPA World Map | Frontlines</title>
+    
+    <!-- 1. Fonte "Sci-Fi" do Google (Rajdhani) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 2. O seu CSS antigo (para manter as cores dos exércitos no mapa) -->
     <link rel="stylesheet" href="map.css">
-    <style>
-        .footer-text {
-            position: fixed left;
-            bottom: 10px;
-            right: 10px;
-            color: white;
-            font-size: 10px;
-            font-family: sans-serif;
-        }
-    </style>
+    
+    <!-- 3. O NOVO CSS de Design (Crie o ficheiro style.css que enviei antes) -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 4. Biblioteca Highcharts (Vital para o mapa funcionar) -->
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 </head>
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<body style="background-color:#003d62">
-<main>
-<figure class="highcharts-figure">
-    <div id="container"></div>
+<body>
+
+    <!-- NAV SUPERIOR -->
+    <nav class="top-nav">
+        <div class="logo-section">
+            <h1>CPA World Map <span style="font-size:0.5em; color:var(--neon-green); vertical-align: super;">LIVE</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">Map</a>
+            <a href="#">Rankings</a>
+            <a href="#">League</a>
+            <a href="#">Discord</a>
+        </div>
+    </nav>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="dashboard-container">
+        
+        <!-- ÁREA DO MAPA (Centro) -->
+        <div class="map-wrapper">
+            <div class="map-header">
+                <span class="status-indicator"><div class="status-dot"></div> SYSTEM STATUS: ONLINE</span>
+            </div>
+
+            <!-- O SEU CONTAINER ORIGINAL DO MAPA -->
+            <!-- O map.js vai procurar por este ID "container" -->
+            <div id="container" style="width:100%; height:100%;"></div>
+
+            <!-- Legenda Flutuante (Opcional - Estilo novo) -->
+            <div class="floating-panel">
+                <div class="panel-header">ARMY CODES</div>
+                <div style="padding:10px; font-size: 0.8rem;">
+                    <!-- A legenda será preenchida pelo seu JS ou manualmente aqui -->
+                    (Hover over territories for details)
+                </div>
+            </div>
+        </div>
+
+        <!-- BARRA LATERAL (Direita - Leaderboard) -->
+        <aside class="sidebar">
+            <h2>Leaderboard</h2>
+            
+            <!-- Exemplo: Scarlet Republic -->
+            <div class="army-card">
+                <span class="army-name" style="color: #ff4444;">Scarlet Republic</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 80%; background: #ff4444; box-shadow: 0 0 10px #ff4444;"></div>
+                </div>
+                <small style="color: #ccc;">Territories: 2</small>
+            </div>
+
+            <!-- Exemplo: SWAT -->
+            <div class="army-card">
+                <span class="army-name" style="color: #00ff00;">SWAT</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 60%; background: #00ff00; box-shadow: 0 0 10px #00ff00;"></div>
+                </div>
+                <small style="color: #ccc;">Territories: 2</small>
+            </div>
+             <!-- Exemplo: Aliens -->
+             <div class="army-card">
+                <span class="army-name" style="color: #00ff80;">Aliens</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 30%; background: #00ff80; box-shadow: 0 0 10px #00ff80;"></div>
+                </div>
+                <small style="color: #ccc;">Territories: 1</small>
+            </div>
+        </aside>
+
+    </div>
+
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555;">
+        Designed by df44 for CPA | UI Refresh by AI
+    </div>
+
+    <!-- O SEU SCRIPT DO MAPA -->
+    <!-- Coloquei no final do body para garantir que o div #container já existe quando ele carregar -->
     <script src="map.js"></script>
-</figure>
-</main>
-<div class="footer-text">Designed by df44 for CPA</div>
-</body>
-</html></div>
+
 </body>
 </html>
-
