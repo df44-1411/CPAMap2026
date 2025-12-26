@@ -1,4 +1,18 @@
 /* style.css - Modern CPA Map Design */
+
+/* Adicione isto no início */
+* {
+    box-sizing: border-box;
+}
+
+/* Garanta que o iframe preenche tudo sem borda branca */
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+}
+
 :root {
     --bg-dark: #050510;
     --panel-bg: rgba(20, 25, 40, 0.85);
