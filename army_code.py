@@ -24,8 +24,55 @@ with open('map.js', 'r') as file:
     # Read the content of the file
     content = file.read()
 
-# Initialize the HTML content
-html_content = "<html><body style='font-family: sans-serif;'>"
+# Initialize the HTML content with Custom CSS for the Dashboard
+html_content = """
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+<style>
+    body {
+        background: transparent;
+        color: #e0e6ed;
+        font-family: 'Rajdhani', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+    /* Estilo do Cartão de Exército */
+    .army-card {
+        margin: 6px 0;
+        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        border-left: 4px solid #fff; /* Cor padrão, substituída inline */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s ease;
+        cursor: default;
+    }
+    .army-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateX(3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .army-name {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+    .territory-count {
+        background: rgba(255,255,255,0.1);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        color: #fff;
+    }
+</style>
+</head>
+<body>
+"""
 
 # Iterate over the search terms
 for term, color in search_terms.items():
@@ -34,8 +81,14 @@ for term, color in search_terms.items():
 
     # If the term appears more than once
     if count >= 1:
-        # Add a line to the HTML content
-        html_content += f'<p style="color: {color}; font-weight: bold;">{term} ({count})</p>'
+        # Add a line to the HTML content using the new classes
+        # Usamos 'color' tanto para o texto quanto para a borda esquerda
+        html_content += f'''
+        <div class="army-card" style="border-left-color: {color};">
+            <span class="army-name" style="color: {color};">{term}</span>
+            <span class="territory-count">{count}</span>
+        </div>
+        '''
 
 # Close the HTML tags
 html_content += "</body></html>"
