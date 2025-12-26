@@ -83,10 +83,18 @@ body {
     box-sizing: border-box;
 }
 
-/* Mapa Container (O "Cartão" Central) */
+/* --- ATUALIZAÇÃO DO MAP WRAPPER (COM GRID) --- */
 .map-wrapper {
-    flex: 3; /* Ocupa 3/4 do espaço */
-    background: var(--panel-bg);
+    flex: 3;
+    background-color: rgba(20, 25, 40, 0.6); /* Fundo base escuro e levemente transparente */
+    
+    /* A GRELHA TÁTICA */
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px; /* Tamanho dos quadrados da grelha */
+    background-position: center;
+    
     border: 1px solid var(--border-color);
     border-radius: 12px;
     position: relative;
@@ -96,122 +104,21 @@ body {
     flex-direction: column;
 }
 
-/* Headerzinho do Mapa */
-.map-header {
-    padding: 10px 20px;
-    background: rgba(0,0,0,0.3);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    color: var(--neon-green);
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--neon-green);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--neon-green);
-}
-
-/* Área onde o Mapa do Highcharts/Leaflet vai viver */
-#map-container {
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: transparent; /* Deixa a grid do body aparecer levemente se o mapa for transparente */
-}
-
-/* --- Sidebar (Agora dedicada aos Army Codes) --- */
+/* --- ATUALIZAÇÃO DA SIDEBAR (PARA O IFRAME) --- */
 .sidebar {
     flex: 1;
-    min-width: 300px; /* Um pouco mais larga para caber os nomes */
+    min-width: 300px;
     background: var(--panel-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Mantém o conteúdo dentro das bordas arredondadas */
+    overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
-.sidebar-header {
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.sidebar h2 {
-    margin: 0;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    color: var(--neon-blue);
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Área de Scroll para a lista de exércitos */
-.army-list-scroll {
-    padding: 15px;
-    overflow-y: auto; /* Permite scroll vertical */
-    flex: 1; /* Ocupa o resto da altura */
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: var(--neon-blue) #050510;
-}
-
-/* Scrollbar personalizada para Chrome/Edge */
-.army-list-scroll::-webkit-scrollbar {
-    width: 6px;
-}
-.army-list-scroll::-webkit-scrollbar-track {
-    background: #050510;
-}
-.army-list-scroll::-webkit-scrollbar-thumb {
-    background-color: var(--neon-blue);
-    border-radius: 3px;
-}
-
-/* --- Estilo dos Itens da Lista (Army Codes) --- */
-/* Copie isto para os seus itens do army_code.html se eles não tiverem estilo */
-.army-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 8px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.army-item:hover {
-    background: rgba(0, 243, 255, 0.05);
-    border-color: var(--neon-blue);
-    transform: translateX(5px); /* Efeito de "slide" tático ao passar o mouse */
-}
-
-/* Pequena bolinha de cor (opcional, se quiser mostrar a cor do exército) */
-.army-color-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 12px;
-    box-shadow: 0 0 5px currentColor;
-}
-
-.army-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #e0e6ed;
+.iframe-container {
+    flex: 1; /* Ocupa todo o espaço restante da sidebar */
+    overflow: hidden;
+    background: transparent;
 }
