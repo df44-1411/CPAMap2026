@@ -131,86 +131,87 @@ body {
     background: transparent; /* Deixa a grid do body aparecer levemente se o mapa for transparente */
 }
 
-/* --- Sidebar (Leaderboard) --- */
+/* --- Sidebar (Agora dedicada aos Army Codes) --- */
 .sidebar {
-    flex: 1; /* Ocupa 1/4 do espaço */
+    flex: 1;
+    min-width: 300px; /* Um pouco mais larga para caber os nomes */
     background: var(--panel-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    min-width: 250px;
+    overflow: hidden; /* Mantém o conteúdo dentro das bordas arredondadas */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .sidebar h2 {
-    margin-top: 0;
-    font-size: 1.2rem;
+    margin: 0;
+    font-size: 1.1rem;
     text-transform: uppercase;
     color: var(--neon-blue);
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Exemplo de Cartão de Exército na Sidebar */
-.army-card {
-    background: rgba(255,255,255,0.03);
-    border-left: 3px solid transparent;
+/* Área de Scroll para a lista de exércitos */
+.army-list-scroll {
     padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    transition: 0.3s;
+    overflow-y: auto; /* Permite scroll vertical */
+    flex: 1; /* Ocupa o resto da altura */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--neon-blue) #050510;
 }
 
-.army-card:hover {
-    background: rgba(255,255,255,0.08);
-    border-left: 3px solid var(--neon-blue);
+/* Scrollbar personalizada para Chrome/Edge */
+.army-list-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.army-list-scroll::-webkit-scrollbar-track {
+    background: #050510;
+}
+.army-list-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--neon-blue);
+    border-radius: 3px;
+}
+
+/* --- Estilo dos Itens da Lista (Army Codes) --- */
+/* Copie isto para os seus itens do army_code.html se eles não tiverem estilo */
+.army-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.army-item:hover {
+    background: rgba(0, 243, 255, 0.05);
+    border-color: var(--neon-blue);
+    transform: translateX(5px); /* Efeito de "slide" tático ao passar o mouse */
+}
+
+/* Pequena bolinha de cor (opcional, se quiser mostrar a cor do exército) */
+.army-color-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+    box-shadow: 0 0 5px currentColor;
 }
 
 .army-name {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.progress-bar-bg {
-    background: rgba(255,255,255,0.1);
-    height: 6px;
-    border-radius: 3px;
-    width: 100%;
-    overflow: hidden;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background: var(--neon-green);
-    width: 70%; /* Exemplo */
-    box-shadow: 0 0 10px var(--neon-green);
-}
-
-/* --- Painel Flutuante (Army Codes/Legend) --- */
-/* Estilo para substituir o painel cinza antigo */
-.floating-panel {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    background: rgba(15, 20, 30, 0.95);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    color: #fff;
-    z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.panel-header {
-    background: rgba(0, 243, 255, 0.1);
-    padding: 10px 15px;
-    font-weight: bold;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    justify-content: space-between;
-    cursor: move; /* Se for arrastável */
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e0e6ed;
 }
