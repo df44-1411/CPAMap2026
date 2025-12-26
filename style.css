@@ -1,138 +1,131 @@
-/* style.css - Modern CPA Map Design */
+/* style.css - CORRIGIDO */
 
-/* Adicione isto no início */
-* {
-    box-sizing: border-box;
-}
-
-/* Garanta que o iframe preenche tudo sem borda branca */
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: transparent;
-}
-
-:root {
-    --bg-dark: #050510;
-    --panel-bg: rgba(20, 25, 40, 0.85);
-    --neon-blue: #00f3ff;
-    --neon-green: #00ff9d;
-    --text-main: #e0e6ed;
-    --text-muted: #94a3b8;
-    --border-color: rgba(0, 243, 255, 0.3);
-}
-
+/* 1. RESET E FUNDO GLOBAL */
 body {
+    background-color: #050510;
     margin: 0;
-    padding: 0;
-    background-color: var(--bg-dark);
-    /* Padrão de Grelha Tática no Fundo */
-    background-image: 
-        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
     font-family: 'Rajdhani', sans-serif;
-    color: var(--text-main);
+    color: #e0e6ed;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Evita scroll na página inteira, apenas no mapa se necessário */
+    overflow: hidden;
 }
 
-/* --- Navigation --- */
+/* 2. FORÇAR A GRID A APARECER */
+/* O segredo é garantir que o fundo do container do mapa seja transparente */
+#container, .highcharts-container {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* O Wrapper segura a Grid */
+.map-wrapper {
+    flex: 3;
+    position: relative;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    
+    /* A GRID TÁTICA */
+    background-color: #001525; /* Azul muito escuro base */
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+/* 3. STATUS DOT CORRIGIDO */
+.map-header {
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #00ff9d; /* Texto Verde */
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #00ff9d; /* Bolinha Verde */
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ff9d; /* Brilho Neon */
+    display: inline-block;
+}
+
+/* 4. SIDEBAR E IFRAME */
+.sidebar {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(15, 20, 30, 0.95);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.sidebar-header {
+    padding: 15px 20px;
+    background: rgba(0, 243, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+.sidebar h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* NAV e LAYOUT GERAL (Mantenha igual) */
+.dashboard-container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    height: calc(100vh - 60px);
+}
+
 .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
-    height: 70px;
-    background: rgba(10, 10, 20, 0.95);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-    z-index: 1000;
+    height: 60px;
+    background: rgba(10, 10, 20, 0.9);
+    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
 }
 
 .logo-section h1 {
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    color: #fff;
     margin: 0;
-    background: linear-gradient(90deg, #fff, var(--neon-blue));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
+    font-size: 1.5rem;
 }
 
 .nav-links a {
+    color: #aaa;
     text-decoration: none;
-    color: var(--text-muted);
+    margin-left: 20px;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.9rem;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    padding: 5px 10px;
-    border-radius: 4px;
 }
 
-.nav-links a:hover, .nav-links a.active {
-    color: var(--neon-blue);
-    background: rgba(0, 243, 255, 0.1);
-    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-}
-
-/* --- Main Layout --- */
-.dashboard-container {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-    gap: 20px;
-    height: calc(100vh - 70px); /* Restante da altura */
-    box-sizing: border-box;
-}
-
-/* --- ATUALIZAÇÃO DO MAP WRAPPER (COM GRID) --- */
-.map-wrapper {
-    flex: 3;
-    background-color: rgba(20, 25, 40, 0.6); /* Fundo base escuro e levemente transparente */
-    
-    /* A GRELHA TÁTICA */
-    background-image: 
-        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px; /* Tamanho dos quadrados da grelha */
-    background-position: center;
-    
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-}
-
-/* --- ATUALIZAÇÃO DA SIDEBAR (PARA O IFRAME) --- */
-.sidebar {
-    flex: 1;
-    min-width: 300px;
-    background: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-.iframe-container {
-    flex: 1; /* Ocupa todo o espaço restante da sidebar */
-    overflow: hidden;
-    background: transparent;
+.nav-links a.active {
+    color: #00f3ff;
 }
