@@ -114,6 +114,35 @@
     </div>
 
     <script src="map.js"></script>
+   
+    <script>
+        window.addEventListener('message', function(event) {
+            // Verificar se o gráfico existe
+            if (!Highcharts.charts || Highcharts.charts.length === 0) return;
+            const chart = Highcharts.charts[0]; 
+
+            if (event.data.type === 'hoverArmy') {
+                const targetArmy = event.data.army.trim();
+
+                chart.series[0].points.forEach(point => {
+                    // Verifica se o 'controller' no map.js bate com o nome na sidebar
+                    // Usamos includes para ser mais flexível (ex: "Water Vikings" vs "Water Vikings ")
+                    if (point.controller && point.controller.includes(targetArmy)) {
+                        point.setState('hover'); // Acende o território
+                        point.graphic.toFront(); // Traz para a frente
+                    } else {
+                        point.setState('inactive'); // Apaga os outros (dim)
+                    }
+                });
+
+            } else if (event.data.type === 'resetMap') {
+                // Reseta todos os pontos para o estado normal
+                chart.series[0].points.forEach(point => {
+                    point.setState(''); 
+                });
+            }
+        });
+     </script>
 
 </body>
 </html>
