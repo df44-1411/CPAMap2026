@@ -1,56 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- CORREÇÃO DE EMERGÊNCIA (Cole antes de </head>) -->
-<style>
-    /* 1. FORÇAR GRID NO MAPA */
-    /* Garante que o Highcharts não tenha fundo azul */
-    .highcharts-container, .highcharts-root, #container {
-        background: transparent !important;
-        background-color: transparent !important;
-    }
-    /* Define o fundo de grelha no wrapper */
-    .map-wrapper {
-        background-color: #051020 !important; /* Azul muito escuro */
-        background-image: 
-            linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
-        background-size: 40px 40px !important;
-    }
-
-    /* 2. CORRIGIR PONTO VERDE */
-    .status-dot {
-        display: inline-block !important;
-        width: 12px !important;
-        height: 12px !important;
-        background-color: #00ff00 !important;
-        border-radius: 50% !important;
-        box-shadow: 0 0 10px #00ff00 !important;
-        margin-right: 10px;
-    }
-
-    /* 3. ALINHAR HEADER DA SIDEBAR */
-    .sidebar-header {
-        padding: 15px 20px !important;
-        background: rgba(0,0,0,0.3) !important;
-        display: flex;
-        align-items: center;
-        height: 50px; /* Altura fixa para alinhar */
-    }
-    .sidebar h2 {
-        margin: 0 !important;
-        line-height: 1 !important;
-    }
-    
-    /* 4. RESETAR O CONTAINER IFRAME */
-    .iframe-container {
-        flex: 1;
-        width: 100%;
-        height: 100%;
-        padding: 0 !important;
-        background: transparent !important;
-    }
-</style>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,6 +13,131 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+
+    <style>
+        /* 1. ESTRUTURA GLOBAL PARA TELA CHEIA */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh; /* Força altura total da janela */
+            overflow: hidden; /* Remove scroll da página inteira */
+            display: flex;
+            flex-direction: column; /* Organiza Nav em cima, Dashboard embaixo */
+        }
+
+        /* 2. BARRA DE NAVEGAÇÃO FIXA */
+        .top-nav {
+            flex: 0 0 auto; /* Não estica, mantém altura original */
+            width: 100%;
+            z-index: 10;
+        }
+
+        /* 3. DASHBOARD OCUPA O RESTO DA TELA */
+        .dashboard-container {
+            flex: 1; /* Ocupa todo o espaço vertical restante */
+            display: flex; /* Sidebar e Mapa lado a lado */
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 4. MAP WRAPPER (Área do Mapa) */
+        .map-wrapper {
+            flex: 1; /* Ocupa todo o espaço horizontal restante */
+            position: relative; /* Necessário para o container absoluto */
+            height: 100%; /* Altura total do pai */
+            
+            /* Estilo da Grid (Mantido do seu código) */
+            background-color: #051020 !important;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
+            background-size: 40px 40px !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header "Systems Online" */
+        .map-header {
+            flex: 0 0 auto;
+            z-index: 5;
+            position: absolute; /* Para ficar sobre o mapa */
+            top: 10px;
+            left: 10px;
+        }
+
+        /* 5. CONTAINER DO HIGHCHARTS (A Correção Principal) */
+        /* Força o Highcharts a ter fundo transparente e ocupar 100% real */
+        .highcharts-container, .highcharts-root, #container {
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+
+        #container {
+            position: absolute !important; /* Fixa nas bordas do wrapper */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* 6. SIDEBAR FIXA */
+        .sidebar {
+            width: 350px; /* Ou a largura que estiver no style.css */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            z-index: 20;
+            background: #020a14; /* Cor de fundo de segurança */
+        }
+
+        .sidebar-header {
+            padding: 15px 20px !important;
+            background: rgba(0,0,0,0.3) !important;
+            display: flex;
+            align-items: center;
+            height: 50px;
+            flex: 0 0 auto;
+        }
+        
+        .sidebar h2 {
+            margin: 0 !important;
+            line-height: 1 !important;
+        }
+        
+        .iframe-container {
+            flex: 1; /* Ocupa o resto da sidebar */
+            width: 100%;
+            padding: 0 !important;
+            background: transparent !important;
+            overflow: hidden;
+        }
+
+        /* Ponto Verde */
+        .status-dot {
+            display: inline-block !important;
+            width: 12px !important;
+            height: 12px !important;
+            background-color: #00ff00 !important;
+            border-radius: 50% !important;
+            box-shadow: 0 0 10px #00ff00 !important;
+            margin-right: 10px;
+        }
+
+        /* Footer flutuante (opcional, ajustei para não atrapalhar o mapa) */
+        .footer-text {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            pointer-events: none; /* Deixa clicar através do texto */
+            color: rgba(255,255,255,0.3) !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -81,23 +155,23 @@
 
     <div class="dashboard-container">
         
-        <!-- O MAPA (Com a Grid no fundo definida no CSS) -->
         <div class="map-wrapper">
             <div class="map-header">
                 <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
             </div>
 
-            <!-- Container do Highcharts -->
-            <div id="container" style="width:100%; height:100%;"></div>
+            <div id="container"></div>
+            
+            <div class="footer-text">
+                UI by df44 | Map by Dino for CPA
+            </div>
         </div>
 
-        <!-- A SIDEBAR (Com o Embed) -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Active Forces</h2>
             </div>
             
-            <!-- O EMBED DO SEU FICHEIRO -->
             <div class="iframe-container">
                 <iframe 
                     src="army_code.html" 
@@ -108,10 +182,6 @@
             </div>
         </aside>
 
-    </div>
-
-    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
-        Designed by df44 for CPA
     </div>
 
     <script src="map.js"></script>
