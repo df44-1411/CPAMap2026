@@ -24,6 +24,7 @@
         backdrop-filter: blur(4px);
         transition: transform 0.2s;
         box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        cursor: pointer;
     }
     .army-card:hover {
         transform: translateX(5px);
@@ -65,7 +66,7 @@
         
         <div class="army-card" style="border-left-color: #3399ff;">
             <span class="army-name">Water Vikings</span>
-            <span class="army-count">2</span>
+            <span class="army-count">1</span>
         </div>
         
         <div class="army-card" style="border-left-color: #00cc00;">
@@ -73,8 +74,34 @@
             <span class="army-count">1</span>
         </div>
         
+        <div class="army-card" style="border-left-color: #ff6666;">
+            <span class="army-name">Smart Penguins</span>
+            <span class="army-count">1</span>
+        </div>
+        
         <div class="army-card" style="border-left-color: #666666;">
             <span class="army-name">Freeland</span>
             <span class="army-count">47</span>
         </div>
-        </body></html>
+        
+<script>
+    // Seleciona todos os cartões gerados
+    const cards = document.querySelectorAll('.army-card');
+    
+    cards.forEach(card => {
+        // Quando o rato entra no cartão
+        card.addEventListener('mouseenter', () => {
+            const name = card.querySelector('.army-name').innerText;
+            // Envia mensagem para o index.html (janela pai)
+            window.parent.postMessage({ type: 'hoverArmy', army: name }, '*');
+        });
+
+        // Quando o rato sai do cartão
+        card.addEventListener('mouseleave', () => {
+            // Envia mensagem para limpar o mapa
+            window.parent.postMessage({ type: 'resetMap' }, '*');
+        });
+    });
+</script>
+</body>
+</html>
