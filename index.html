@@ -1,5 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    /* 1. ESTRUTURA GLOBAL DA PÁGINA */
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Remove scroll da página inteira */
+        display: flex;
+        flex-direction: column; /* Organiza: Nav em cima, Resto em baixo */
+    }
+
+    /* Garante que a Nav não encolha */
+    .top-nav {
+        flex: 0 0 auto;
+    }
+
+    /* 2. O CONTENTOR PRINCIPAL (DASHBOARD) */
+    /* Este é o segredo: ele tem de ocupar o espaço que sobra (flex: 1) */
+    .dashboard-container {
+        flex: 1; 
+        display: flex; /* Coloca Mapa e Sidebar lado a lado */
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* 3. WRAPPER DO MAPA (Onde o mapa vive) */
+    .map-wrapper {
+        flex: 1; /* Ocupa toda a largura disponível (empurra a sidebar para a direita) */
+        position: relative; /* Importante para o mapa absoluto funcionar */
+        height: 100%;
+        
+        /* O teu estilo de grelha original */
+        background-color: #051020 !important;
+        background-image: 
+            linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
+        background-size: 40px 40px !important;
+    }
+
+    /* 4. O MAPA HIGHCHARTS EM SI */
+    /* Removemos fundos do Highcharts e forçamos o tamanho */
+    .highcharts-container, .highcharts-root, #container {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
+    #container {
+        position: absolute; /* Cola o mapa aos cantos do wrapper */
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* 5. SIDEBAR */
+    .sidebar {
+        height: 100%; /* Força altura total */
+        display: flex;
+        flex-direction: column;
+        z-index: 10;
+        /* Se precisares de ajustar a largura da sidebar, fá-lo no style.css ou aqui: */
+        /* width: 350px; */ 
+    }
+
+    .sidebar-header {
+        padding: 15px 20px !important;
+        background: rgba(0,0,0,0.3) !important;
+        display: flex;
+        align-items: center;
+        height: 50px;
+        flex-shrink: 0;
+    }
+
+    .iframe-container {
+        flex: 1; /* Ocupa o resto da sidebar */
+        width: 100%;
+        height: 100%;
+        padding: 0 !important;
+        background: transparent !important;
+        overflow: hidden;
+    }
+
+    /* UTILS */
+    .status-dot {
+        display: inline-block !important;
+        width: 12px !important;
+        height: 12px !important;
+        background-color: #00ff00 !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 10px #00ff00 !important;
+        margin-right: 10px;
+    }
+    
+    .sidebar h2 {
+        margin: 0 !important;
+        line-height: 1 !important;
+    }
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,150 +112,18 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-
-    <style>
-        /* 1. CONFIGURAÇÃO GERAL DA PÁGINA (FUNDO E FONTE) */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100vh; /* Ocupa a altura da janela */
-            background-color: #020a14; /* Fundo escuro atrás do dashboard */
-            font-family: 'Rajdhani', sans-serif;
-            overflow: hidden; /* Evita scroll desnecessário na página principal */
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 2. NAVBAR (TOPO) */
-        .top-nav {
-            flex: 0 0 auto; /* Altura fixa baseada no conteúdo */
-            width: 100%;
-            z-index: 10;
-        }
-
-        /* 3. LAYOUT PRINCIPAL (Onde a mágica acontece) */
-        .dashboard-container {
-            flex: 1; /* Ocupa o resto da altura da tela */
-            display: flex; /* Coloca Mapa e Sidebar lado a lado */
-            padding: 20px 40px; /* Margem em volta do dashboard (cima/baixo esq/dir) */
-            gap: 20px; /* Espaço entre o Mapa e a Sidebar */
-            box-sizing: border-box;
-            height: 100%; /* Garante que usa a altura disponível */
-        }
-        
-        /* 4. ÁREA DO MAPA (CAIXA AZUL ESQUERDA) */
-        .map-wrapper {
-            flex: 1; /* O mapa cresce para ocupar o espaço sobrando */
-            position: relative; 
-            border-radius: 12px; /* Cantos arredondados iguais à imagem */
-            border: 1px solid #1c3d5e; /* Borda sutil */
-            overflow: hidden; /* Mantém tudo dentro das bordas arredondadas */
-            
-            /* Grelha de fundo */
-            background-color: #051020 !important;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px) !important;
-            background-size: 40px 40px !important;
-            
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header dentro do mapa "SYSTEMS ONLINE" */
-        .map-header {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-            background: rgba(2, 10, 20, 0.8);
-            padding: 5px 10px;
-            border-radius: 4px;
-            border: 1px solid #1c3d5e;
-        }
-
-        /* 5. CONTAINER DO HIGHCHARTS (A Correção de Escala) */
-        .highcharts-container, .highcharts-root, #container {
-            background: transparent !important;
-        }
-
-        #container {
-            width: 100% !important;
-            height: 100% !important;
-            /* Flex garante que ele preencha o pai (.map-wrapper) */
-            flex: 1; 
-        }
-
-        /* 6. SIDEBAR (DIREITA) */
-        .sidebar {
-            width: 380px; /* Largura fixa para manter a proporção da imagem */
-            flex-shrink: 0; /* Impede que a sidebar encolha */
-            display: flex;
-            flex-direction: column;
-            background: #051020; /* Fundo igual ao do mapa */
-            border: 1px solid #1c3d5e;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid #1c3d5e;
-        }
-        
-        .sidebar h2 {
-            margin: 0;
-            color: #00ffff; /* Ciano neon */
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 1.2rem;
-        }
-        
-        /* Área do Iframe na sidebar */
-        .iframe-container {
-            flex: 1; /* Ocupa o resto da sidebar */
-            width: 100%;
-            background: transparent !important;
-            position: relative;
-        }
-
-        /* Ponto Verde */
-        .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #00ff00;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ff00;
-            margin-right: 8px;
-        }
-
-        /* Footer Texto */
-        .footer-text {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            color: rgba(255,255,255,0.2);
-            font-size: 0.75rem;
-            pointer-events: none;
-        }
-
-    </style>
 </head>
 <body>
 
     <nav class="top-nav">
         <div class="logo-section">
-            <h1>CPA:THE MAP <span style="font-size:0.5em; color:#00ff00; vertical-align: super;">LIVE</span></h1>
+            <h1>CPA:The Map <span style="font-size:0.5em; color:var(--neon-green); vertical-align: super;">LIVE</span></h1>
         </div>
         <div class="nav-links">
-            <a href="#" class="active">MAP</a>
-            <a href="#">RANKINGS</a>
-            <a href="#">LEAGUE</a>
-            <a href="#">DISCORD</a>
+            <a href="#" class="active">Map</a>
+            <a href="#">Rankings</a>
+            <a href="#">League</a>
+            <a href="#">Discord</a>
         </div>
     </nav>
 
@@ -168,10 +135,6 @@
             </div>
 
             <div id="container"></div>
-
-            <div class="footer-text">
-                UI by df44 | Map by Dino for CPA
-            </div>
         </div>
 
         <aside class="sidebar">
@@ -189,6 +152,10 @@
             </div>
         </aside>
 
+    </div>
+
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem; position: fixed; bottom: 0; width: 100%; pointer-events: none; z-index: 20;">
+        Designed by df44 for CPA
     </div>
 
     <script src="map.js"></script>
