@@ -1,11 +1,16 @@
 import json
 import os
 
-# --- CONFIGURAÇÃO ---
-DATA_DIR = 'data'
-OUTPUT_MAP_JS = 'map.js'
-OUTPUT_ARMY_HTML = 'army_code.html'
-OUTPUT_WEALTH_HTML = 'wealth_code.html'
+# --- CONFIGURAÇÃO DE CAMINHOS (CORREÇÃO) ---
+# Descobre onde este script está e define a pasta PAIO (Raiz) como base
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR) # Sobe um nível para a raiz
+
+# Define caminhos absolutos para garantir que gravamos no sítio certo
+DATA_DIR = os.path.join(ROOT_DIR, 'scripts/data')
+OUTPUT_MAP_JS = os.path.join(ROOT_DIR, 'map.js')
+OUTPUT_ARMY_HTML = os.path.join(ROOT_DIR, 'army_code.html')
+OUTPUT_WEALTH_HTML = os.path.join(ROOT_DIR, 'wealth_code.html')
 
 def load_json(filename):
     path = os.path.join(DATA_DIR, filename)
@@ -16,6 +21,7 @@ def load_json(filename):
         return json.load(f)
 
 # 1. CARREGAR DADOS
+print(f"📂 A ler dados de: {DATA_DIR}")
 servers = load_json('servers.json')
 armies = load_json('armies.json')
 
@@ -24,13 +30,12 @@ print(f"📖 Lidos {len(servers)} servidores e {len(armies)} exércitos.")
 # ==========================================
 # PARTE A: GERAR MAP.JS
 # ==========================================
-print("⚙️ A gerar map.js...")
+print(f"⚙️ A gerar {OUTPUT_MAP_JS}...")
 
 # Mapa de cores simples para injeção no JS
 army_colors = {name: data['color'] for name, data in armies.items()}
 
 # A lógica JavaScript que será escrita no ficheiro
-# Nota: Mantemos a estrutura do teu map.js original mas injetamos os dados limpos
 js_content = f"""
 // GERADO AUTOMATICAMENTE POR generate_site.py
 // NÃO EDITAR DIRETAMENTE - EDITE data/servers.json
@@ -175,4 +180,4 @@ sorted_wealth = sorted(
 )
 generate_html_list(sorted_wealth, OUTPUT_WEALTH_HTML)
 
-print("✅ SUCESSO! map.js, army_code.html e wealth_code.html foram atualizados.")
+print("✅ SUCESSO! map.js, army_code.html e wealth_code.html foram atualizados na RAIZ.")
