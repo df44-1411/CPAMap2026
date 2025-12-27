@@ -1,6 +1,7 @@
 /* style.css - Modern CPA Map Design */
 :root {
     --bg-dark: #050510;
+    --bg-mapp: #003d62;
     --panel-bg: rgba(20, 25, 40, 0.85);
     --neon-blue: #00f3ff;
     --neon-green: #00ff9d;
@@ -86,7 +87,7 @@ body {
 /* Mapa Container (O "Cartão" Central) */
 .map-wrapper {
     flex: 3; /* Ocupa 3/4 do espaço */
-    background: var(--panel-bg);
+    background: var(--bg-mapp);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     position: relative;
