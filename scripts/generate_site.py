@@ -1,7 +1,7 @@
 import json
 import os
 
-# --- CONFIGURAÇÃO DE CAMINHOS Novos! ---
+# --- CONFIGURAÇÃO DE CAMINHOS ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR) 
 
@@ -66,7 +66,8 @@ Highcharts.mapChart('container', {{
         enabled: true,
         formatter: function() {{
           if (this.point.type === "CAPITAL") {{
-            return '<span style="color: #ffff00; text-shadow: 0 0 3px #000; font-weight:bold">' + this.point.name + '</span>';
+            // CORRIGIDO: Verde (#00ff00) para capitais
+            return '<span style="color: #00ff00; text-shadow: 0 0 3px #000; font-weight:bold">' + this.point.name + '</span>';
           }} else {{
             return this.point.name;
           }}
@@ -83,7 +84,11 @@ Highcharts.mapChart('container', {{
     const armyColors = {json.dumps(army_colors)};
     
     chart.series[0].points.forEach(function(point) {{
-        if (point.controller && armyColors[point.controller]) {{
+        // CORRIGIDO: Se for Freeland, usa a cor do fundo (Azul Escuro) ou a cor definida se preferires
+        if (point.controller === "Freeland") {{
+             point.graphic.css({{ fill: '#4a5568' }}); // Cor para Freeland (Ajuste aqui se quiseres outra)
+        }} 
+        else if (point.controller && armyColors[point.controller]) {{
             point.graphic.css({{ fill: armyColors[point.controller] }});
         }} else {{
             point.graphic.css({{ fill: '#4a5568' }}); // Cor cinza padrão se sem dono
@@ -168,12 +173,12 @@ sorted_forces = sorted(
 )
 generate_html_list(sorted_forces, OUTPUT_ARMY_HTML)
 
-# 2. LISTA DE RIQUEZA (AGORA COM TODOS)
+# 2. LISTA DE RIQUEZA (TODOS)
 sorted_wealth = sorted(
     [{'name': k, 'value': f"${v.get('wealth', 0)}", 'color': v['color'], 'raw_wealth': v.get('wealth', 0)} 
-     for k, v in armies.items()], # REMOVI O FILTRO
+     for k, v in armies.items()], 
     key=lambda x: x['raw_wealth'], reverse=True
 )
 generate_html_list(sorted_wealth, OUTPUT_WEALTH_HTML)
 
-print("✅ SUCESSO! map.js, army_code.html e wealth_code.html foram atualizados na RAIZ.")
+print("✅ SUCESSO! Cores das Capitais e Freeland corrigidas na RAIZ.")
