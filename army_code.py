@@ -23,33 +23,27 @@ search_terms = {
 with open('map.js', 'r') as file:
     content = file.read()
 
-# 1. Calcular contagens e guardar numa lista temporária
+# 1. Calcular e Ordenar
 army_data = []
-
 for term, color in search_terms.items():
-    # Conta quantas vezes o nome aparece no map.js
-    # Subtrai 1 porque o nome aparece na definição da lista também, não só nas ilhas
     count = content.lower().count(term.lower()) - 1
-    
     if count >= 1:
-        army_data.append({
-            "name": term,
-            "count": count,
-            "color": color
-        })
+        army_data.append({ "name": term, "count": count, "color": color })
 
-# 2. Ordenar a lista do menor para o maior (Ascending)
-# Se quiseres do maior para o menor, muda para reverse=True
 army_data.sort(key=operator.itemgetter('count'), reverse=False)
 
-# 3. Gerar o HTML
+# 2. Gerar HTML com NO-CACHE META TAGS
 html_content = """
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
 <style>
-    /* CUSTOM SCROLLBAR (ESTILO CYBERPUNK) */
+    /* CUSTOM SCROLLBAR */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
     ::-webkit-scrollbar-thumb { background: #1c3d5e; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.1); }
@@ -110,7 +104,6 @@ html_content = """
 <body>
 """
 
-# 4. Inserir os cartões já ordenados
 for army in army_data:
     html_content += f'''
     <div class="army-card" style="border-left-color: {army['color']};">
@@ -122,13 +115,11 @@ for army in army_data:
 html_content += """
 <script>
     const cards = document.querySelectorAll('.army-card');
-    
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             const name = card.querySelector('.army-name').innerText;
             window.parent.postMessage({ type: 'hoverArmy', army: name }, '*');
         });
-
         card.addEventListener('mouseleave', () => {
             window.parent.postMessage({ type: 'resetMap' }, '*');
         });
@@ -140,4 +131,4 @@ html_content += """
 
 with open("army_code.html", 'w') as file:
     file.write(html_content)
-print("army_code.html updated: Sorted by land count (Least to Most).")
+print("army_code.html updated with NO-CACHE tags.")
