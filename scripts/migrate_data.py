@@ -10,7 +10,7 @@ if not os.path.exists('data'):
 # 2. MIGRAR EXÉRCITOS (de army_code.py para armies.json)
 print("🔄 A migrar exércitos...")
 try:
-    with open('army_code.py', 'r', encoding='utf-8') as f:
+    with open('/workspaces/CPAMap2026_Testing/army_code.py', 'r', encoding='utf-8') as f:
         content = f.read()
         
     # Extrair o dicionário search_terms usando Regex
@@ -41,7 +41,7 @@ except Exception as e:
 # 3. MIGRAR SERVIDORES (de map.js para servers.json)
 print("🔄 A migrar servidores do mapa...")
 try:
-    with open('map.js', 'r', encoding='utf-8') as f:
+    with open('/workspaces/CPAMap2026_Testing/map.js', 'r', encoding='utf-8') as f:
         js_content = f.read()
 
     # Extrair mapData. Procura por "var mapData = [" até o "];"
