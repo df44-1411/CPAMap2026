@@ -1,7 +1,7 @@
 import json
 import os
 
-# --- CONFIGURAÇÃO DE CAMINHOS ---
+# --- CONFIGURAÇÃO DE CAMINHOS Novos! ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR) 
 
