@@ -1,5 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+   <style>
+    /* 1. FORÇAR GRID NO MAPA */
+    /* Garante que o Highcharts não tenha fundo azul */
+    .highcharts-container, .highcharts-root, #container {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    /* Define o fundo de grelha no wrapper */
+    .map-wrapper {
+        background-color: #051020 !important; /* Azul muito escuro */
+        background-image: 
+            linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
+        background-size: 40px 40px !important;
+    }
+
+    /* 2. CORRIGIR PONTO VERDE */
+    .status-dot {
+        display: inline-block !important;
+        width: 12px !important;
+        height: 12px !important;
+        background-color: #00ff00 !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 10px #00ff00 !important;
+        margin-right: 10px;
+    }
+
+    /* 3. ALINHAR HEADER DA SIDEBAR */
+    .sidebar-header {
+        padding: 15px 20px !important;
+        background: rgba(0,0,0,0.3) !important;
+        display: flex;
+        align-items: center;
+        height: 50px; /* Altura fixa para alinhar */
+    }
+    .sidebar h2 {
+        margin: 0 !important;
+        line-height: 1 !important;
+    }
+    
+    /* 4. RESETAR O CONTAINER IFRAME */
+    .iframe-container {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,184 +63,6 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-
-    <style>
-        /* --- ESTILOS GERAIS (DESKTOP) --- */
-        html, body {
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Desktop não tem scroll na página */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .top-nav {
-            flex: 0 0 auto;
-        }
-
-        .dashboard-container {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-            box-sizing: border-box;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .map-wrapper {
-            flex: 1;
-            position: relative;
-            border-radius: 12px;
-            background-color: #051020 !important;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
-            background-size: 40px 40px !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .map-header {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 20;
-            background: rgba(5, 16, 32, 0.8);
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            pointer-events: none;
-        }
-
-        .highcharts-container, .highcharts-root, #container {
-            background: transparent !important;
-        }
-
-        #container {
-            width: 95% !important; 
-            height: 95% !important;
-            z-index: 1; 
-        }
-
-        .sidebar {
-            width: 350px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background: rgba(20, 25, 40, 0.85);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            z-index: 10;
-        }
-
-        .sidebar-header {
-            flex: 0 0 50px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(0,0,0,0.3);
-        }
-
-        .sidebar h2 {
-            margin: 0;
-            color: #00f3ff;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-        }
-
-        .iframe-container {
-            flex: 1;
-            width: 100%;
-            background: transparent;
-            overflow: hidden;
-            border-radius: 0 0 12px 12px;
-        }
-
-        .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background-color: #00ff9d;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff9d;
-            margin-right: 8px;
-        }
-        
-        .footer-text {
-            position: fixed;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255,255,255,0.2);
-            font-size: 0.8rem;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        /* --- SUPORTE MOBILE (ADICIONADO AGORA) --- */
-        @media screen and (max-width: 768px) {
-            
-            /* 1. Permitir scroll na página inteira no telemóvel */
-            html, body {
-                height: auto !important;
-                overflow-y: auto !important;
-                display: block !important;
-            }
-
-            /* 2. Ajustar a Navegação */
-            .top-nav {
-                flex-direction: column;
-                height: auto !important;
-                padding: 15px !important;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .nav-links {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            /* 3. Mudar layout de Lado-a-Lado para Pilha (Stack) */
-            .dashboard-container {
-                display: flex !important;
-                flex-direction: column !important; /* Um em cima do outro */
-                height: auto !important;
-                padding: 10px !important;
-                gap: 15px !important;
-                overflow: visible !important;
-            }
-
-            /* 4. Mapa ocupa metade da tela ou tamanho fixo */
-            .map-wrapper {
-                width: 100% !important;
-                height: 50vh !important; /* 50% da altura do ecrã */
-                min-height: 300px; /* Mínimo seguro */
-                flex: none !important;
-            }
-
-            /* 5. Sidebar ocupa o resto e fica por baixo */
-            .sidebar {
-                width: 100% !important;
-                height: 500px !important; /* Altura fixa para scroll interno funcionar */
-                flex: none !important;
-            }
-
-            /* 6. Footer deixa de ser fixo para não tapar conteúdo */
-            .footer-text {
-                position: relative !important;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                transform: none !important;
-                left: 0 !important;
-                width: 100%;
-                display: block;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -208,13 +80,17 @@
 
     <div class="dashboard-container">
         
+        <!-- O MAPA (Com a Grid no fundo definida no CSS) -->
         <div class="map-wrapper">
             <div class="map-header">
                 <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
             </div>
-            <div id="container"></div>
+
+            <!-- Container do Highcharts -->
+            <div id="container" style="width:100%; height:100%;"></div>
         </div>
 
+        <!-- A SIDEBAR (Com o Embed) -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Active Forces</h2>
@@ -230,45 +106,51 @@
             </div>
             
             <script>
-                // Cache Busting
+                // Adiciona um número aleatório (?v=123456) ao link para impedir cache
                 document.getElementById('armyFrame').src = "army_code.html?v=" + new Date().getTime();
             </script>
         </aside>
 
     </div>
 
-    <div class="footer-text">
-        UI by df44 | Design by Dino for CPA
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
+        UI by df44 | Map by Dino for CPA
     </div>
 
     <script src="map.js"></script>
-
+   
     <script>
         window.addEventListener('message', function(event) {
+            // Verificar se o gráfico existe e está carregado
             if (!Highcharts.charts || Highcharts.charts.length === 0) return;
             const chart = Highcharts.charts[0]; 
 
             if (event.data.type === 'hoverArmy') {
-                const targetArmy = event.data.army.toLowerCase().trim();
+                const targetArmy = event.data.army.toLowerCase().trim(); // Converter para minúsculas para facilitar a comparação
 
+                // Loop por todos os pontos do mapa
                 chart.series[0].points.forEach(point => {
+                    // Proteção: Se o ponto não tiver controller (ex: fundo), ignorar
                     if (!point.controller) {
                         point.setState('inactive');
                         return;
                     }
+
                     const mapOwner = point.controller.toLowerCase().trim();
 
+                    // Verifica se os nomes batem (ex: "Water Vikings" == "Water Vikings")
                     if (mapOwner.includes(targetArmy) || targetArmy.includes(mapOwner)) {
-                        point.setState('hover'); 
-                        point.graphic.toFront(); 
+                        point.setState('hover'); // Ativa o brilho definido no map.js
+                        point.graphic.toFront(); // Traz para frente (para a borda não ficar cortada)
                     } else {
-                        point.setState('inactive');
+                        point.setState('inactive'); // Define a opacidade 0.5 (que configurámos no map.js)
                     }
                 });
 
             } else if (event.data.type === 'resetMap') {
+                // Reseta todos os pontos para o estado normal
                 chart.series[0].points.forEach(point => {
-                    point.setState('normal'); 
+                    point.setState('normal'); // Força o estado normal (100% opacidade)
                 });
             }
         });
