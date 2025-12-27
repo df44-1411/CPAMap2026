@@ -1,3 +1,5 @@
+import operator
+
 search_terms = {
     "Club Penguin Armies": "#87d1ff",
     "CPA Battleground": "#ff4d4d",
@@ -21,39 +23,72 @@ search_terms = {
 with open('map.js', 'r') as file:
     content = file.read()
 
-# CSS e JAVASCRIPT INJETADOS DIRETAMENTE
+# 1. Calcular contagens e guardar numa lista temporária
+army_data = []
+
+for term, color in search_terms.items():
+    # Conta quantas vezes o nome aparece no map.js
+    # Subtrai 1 porque o nome aparece na definição da lista também, não só nas ilhas
+    count = content.lower().count(term.lower()) - 1
+    
+    if count >= 1:
+        army_data.append({
+            "name": term,
+            "count": count,
+            "color": color
+        })
+
+# 2. Ordenar a lista do menor para o maior (Ascending)
+# Se quiseres do maior para o menor, muda para reverse=True
+army_data.sort(key=operator.itemgetter('count'), reverse=False)
+
+# 3. Gerar o HTML
 html_content = """
 <!DOCTYPE html>
 <html>
 <head>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
 <style>
+    /* CUSTOM SCROLLBAR (ESTILO CYBERPUNK) */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #1c3d5e; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.1); }
+    ::-webkit-scrollbar-thumb:hover { background: #00f3ff; box-shadow: 0 0 10px #00f3ff; }
+    html { scrollbar-width: thin; scrollbar-color: #1c3d5e rgba(0, 0, 0, 0.2); }
+
+    /* ESTILO GERAL */
     body {
         background: transparent;
         font-family: 'Rajdhani', sans-serif;
         margin: 0;
-        padding: 10px;
+        padding: 5px 10px 5px 5px;
         overflow-x: hidden;
+        overflow-y: auto;
     }
+
     .army-card {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(20, 30, 50, 0.85); /* Fundo escuro */
+        background: rgba(20, 30, 50, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-left-width: 5px; /* Borda grossa colorida */
+        border-left-width: 5px;
         margin-bottom: 8px;
         padding: 12px 15px;
         border-radius: 4px;
         backdrop-filter: blur(4px);
-        transition: transform 0.2s;
+        transition: transform 0.2s, background 0.2s;
         box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         cursor: pointer;
+        position: relative;
     }
+
     .army-card:hover {
         transform: translateX(5px);
         background: rgba(40, 50, 80, 0.95);
+        border-color: rgba(0, 243, 255, 0.3);
     }
+
     .army-name {
         color: #e0e6ed;
         font-weight: 700;
@@ -61,6 +96,7 @@ html_content = """
         text-transform: uppercase;
         letter-spacing: 1px;
     }
+
     .army-count {
         background: rgba(255,255,255,0.1);
         color: #fff;
@@ -74,34 +110,26 @@ html_content = """
 <body>
 """
 
-# Geração dos cartões
-for term, color in search_terms.items():
-    count = content.lower().count(term.lower()) - 1
-    if count >= 1:
-        html_content += f'''
-        <div class="army-card" style="border-left-color: {color};">
-            <span class="army-name">{term}</span>
-            <span class="army-count">{count}</span>
-        </div>
-        '''
+# 4. Inserir os cartões já ordenados
+for army in army_data:
+    html_content += f'''
+    <div class="army-card" style="border-left-color: {army['color']};">
+        <span class="army-name">{army['name']}</span>
+        <span class="army-count">{army['count']}</span>
+    </div>
+    '''
 
-# Adicionar o Script de Comunicação no final do HTML gerado
 html_content += """
 <script>
-    // Seleciona todos os cartões gerados
     const cards = document.querySelectorAll('.army-card');
     
     cards.forEach(card => {
-        // Quando o rato entra no cartão
         card.addEventListener('mouseenter', () => {
             const name = card.querySelector('.army-name').innerText;
-            // Envia mensagem para o index.html (janela pai)
             window.parent.postMessage({ type: 'hoverArmy', army: name }, '*');
         });
 
-        // Quando o rato sai do cartão
         card.addEventListener('mouseleave', () => {
-            // Envia mensagem para limpar o mapa
             window.parent.postMessage({ type: 'resetMap' }, '*');
         });
     });
@@ -112,4 +140,4 @@ html_content += """
 
 with open("army_code.html", 'w') as file:
     file.write(html_content)
-print("army_code.html fixed with embedded CSS and Interaction Script.")
+print("army_code.html updated: Sorted by land count (Least to Most).")
