@@ -432,9 +432,9 @@ var mapData = [
 
 Highcharts.mapChart('container', {
     chart: {
-      height: (3 / 4 * 100) + '%',
+      height: 'auto',
       weight: 'auto',
-      backgroundColor: '#003d62',
+      backgroundColor: 'transparent',
       type: 'line',
       map: 'cpa',
     },
