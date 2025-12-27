@@ -96,15 +96,19 @@
                 <h2>Active Forces</h2>
             </div>
             
-            <!-- O EMBED DO SEU FICHEIRO -->
             <div class="iframe-container">
                 <iframe 
-                    src="army_code.html" 
+                    id="armyFrame"
                     frameborder="0" 
                     style="width: 100%; height: 100%; display: block;"
                     title="Army Codes">
                 </iframe>
             </div>
+            
+            <script>
+                // Adiciona um número aleatório (?v=123456) ao link para impedir cache
+                document.getElementById('armyFrame').src = "army_code.html?v=" + new Date().getTime();
+            </script>
         </aside>
 
     </div>
