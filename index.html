@@ -2,14 +2,12 @@
 <html lang="en">
    <style>
     /* 1. FORÇAR GRID NO MAPA */
-    /* Garante que o Highcharts não tenha fundo azul */
     .highcharts-container, .highcharts-root, #container {
         background: transparent !important;
         background-color: transparent !important;
     }
-    /* Define o fundo de grelha no wrapper */
     .map-wrapper {
-        background-color: #051020 !important; /* Azul muito escuro */
+        background-color: #051020 !important;
         background-image: 
             linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
@@ -26,33 +24,78 @@
         box-shadow: 0 0 10px #00ff00 !important;
         margin-right: 10px;
     }
-
-    /* 3. ALINHAR HEADER DA SIDEBAR */
-    .sidebar-header {
-        padding: 15px 20px !important;
-        background: rgba(0,0,0,0.3) !important;
-        display: flex;
-        align-items: center;
-        height: 50px; /* Altura fixa para alinhar */
-    }
-    .sidebar h2 {
-        margin: 0 !important;
-        line-height: 1 !important;
-    }
     
-    /* 4. RESETAR O CONTAINER IFRAME */
+    /* 3. RESETAR O CONTAINER IFRAME */
     .iframe-container {
-        flex: 1;
         width: 100%;
         height: 100%;
         padding: 0 !important;
         background: transparent !important;
+        border: none;
     }
+
+    /* 4. ESTILO DAS ABAS (NOVO) */
+    .sidebar-tabs {
+        display: flex;
+        background: rgba(0,0,0,0.3);
+        border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    }
+
+    .tab-btn {
+        flex: 1; /* Distribui espaço igualmente */
+        background: transparent;
+        border: none;
+        color: #94a3b8; /* Cor suave */
+        padding: 15px 5px;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .tab-btn:hover {
+        color: #fff;
+        background: rgba(255,255,255,0.05);
+    }
+
+    .tab-btn.active {
+        color: #00f3ff; /* Neon Blue */
+        border-bottom: 2px solid #00f3ff;
+        background: rgba(0, 243, 255, 0.05);
+    }
+
+    /* Conteúdo das Abas */
+    .tab-content {
+        display: none; /* Escondido por defeito */
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .tab-content.active {
+        display: block; /* Mostra o ativo */
+    }
+
+    /* Placeholder para abas vazias */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: #556;
+        text-align: center;
+        padding: 20px;
+    }
+    .empty-state h3 { margin: 0; color: #00f3ff; }
 </style>
 
 <head>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=1280, user-scalable=yes">
 
     <title>Club Penguin Armies: The Map</title>
@@ -86,26 +129,44 @@
             <div class="map-header">
                 <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
             </div>
-
             <div id="container" style="width:100%; height:100%;"></div>
         </div>
 
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Active Forces</h2>
+            
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'forces')">Active Forces</button>
+                <button class="tab-btn" onclick="openTab(event, 'wealth')">Wealth</button>
+                <button class="tab-btn" onclick="openTab(event, 'war')">Wars</button>
             </div>
             
-            <div class="iframe-container">
-                <iframe 
-                    id="armyFrame"
-                    frameborder="0" 
-                    style="width: 100%; height: 100%; display: block;"
-                    title="Army Codes">
-                </iframe>
+            <div id="forces" class="tab-content active">
+                <div class="iframe-container">
+                    <iframe 
+                        id="armyFrame"
+                        frameborder="0" 
+                        style="width: 100%; height: 100%; display: block;"
+                        title="Army Codes">
+                    </iframe>
+                </div>
+            </div>
+
+            <div id="wealth" class="tab-content">
+                <div class="empty-state">
+                    <h3>COMING SOON</h3>
+                    <p>Economic data offline.</p>
+                </div>
+            </div>
+
+            <div id="war" class="tab-content">
+                <div class="empty-state">
+                    <h3 style="color: #ff3333;">PEACEFUL TIMES</h3>
+                    <p>No active conflicts detected.</p>
+                </div>
             </div>
             
             <script>
-                // Adiciona um número aleatório (?v=123456) ao link para impedir cache
+                // Cache Busting para a aba principal
                 document.getElementById('armyFrame').src = "army_code.html?v=" + new Date().getTime();
             </script>
         </aside>
@@ -119,37 +180,51 @@
     <script src="map.js"></script>
     
     <script>
+        // 1. Lógica das Abas
+        function openTab(evt, tabName) {
+            // Esconde todo o conteúdo
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            // Remove a classe "active" de todos os botões
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            // Mostra a aba atual e adiciona "active" ao botão clicado
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // 2. Interação Hover (Mantida)
         window.addEventListener('message', function(event) {
-            // Verificar se o gráfico existe e está carregado
             if (!Highcharts.charts || Highcharts.charts.length === 0) return;
             const chart = Highcharts.charts[0]; 
 
             if (event.data.type === 'hoverArmy') {
-                const targetArmy = event.data.army.toLowerCase().trim(); // Converter para minúsculas para facilitar a comparação
-
-                // Loop por todos os pontos do mapa
+                const targetArmy = event.data.army.toLowerCase().trim();
                 chart.series[0].points.forEach(point => {
-                    // Proteção: Se o ponto não tiver controller (ex: fundo), ignorar
                     if (!point.controller) {
                         point.setState('inactive');
                         return;
                     }
-
                     const mapOwner = point.controller.toLowerCase().trim();
-
-                    // Verifica se os nomes batem (ex: "Water Vikings" == "Water Vikings")
                     if (mapOwner.includes(targetArmy) || targetArmy.includes(mapOwner)) {
-                        point.setState('hover'); // Ativa o brilho definido no map.js
-                        point.graphic.toFront(); // Traz para frente (para a borda não ficar cortada)
+                        point.setState('hover');
+                        point.graphic.toFront();
                     } else {
-                        point.setState('inactive'); // Define a opacidade 0.5 (que configurámos no map.js)
+                        point.setState('inactive');
                     }
                 });
-
             } else if (event.data.type === 'resetMap') {
-                // Reseta todos os pontos para o estado normal
                 chart.series[0].points.forEach(point => {
-                    point.setState('normal'); // Força o estado normal (100% opacidade)
+                    point.setState('normal');
                 });
             }
         });
