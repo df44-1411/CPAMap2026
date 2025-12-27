@@ -117,32 +117,40 @@
    
     <script>
         window.addEventListener('message', function(event) {
-            // Verificar se o gráfico existe
+            // Verificar se o gráfico existe e está carregado
             if (!Highcharts.charts || Highcharts.charts.length === 0) return;
             const chart = Highcharts.charts[0]; 
 
             if (event.data.type === 'hoverArmy') {
-                const targetArmy = event.data.army.trim();
+                const targetArmy = event.data.army.toLowerCase().trim(); // Converter para minúsculas para facilitar a comparação
 
+                // Loop por todos os pontos do mapa
                 chart.series[0].points.forEach(point => {
-                    // Verifica se o 'controller' no map.js bate com o nome na sidebar
-                    // Usamos includes para ser mais flexível (ex: "Water Vikings" vs "Water Vikings ")
-                    if (point.controller && point.controller.includes(targetArmy)) {
-                        point.setState('hover'); // Acende o território
-                        point.graphic.toFront(); // Traz para a frente
+                    // Proteção: Se o ponto não tiver controller (ex: fundo), ignorar
+                    if (!point.controller) {
+                        point.setState('inactive');
+                        return;
+                    }
+
+                    const mapOwner = point.controller.toLowerCase().trim();
+
+                    // Verifica se os nomes batem (ex: "Water Vikings" == "Water Vikings")
+                    if (mapOwner.includes(targetArmy) || targetArmy.includes(mapOwner)) {
+                        point.setState('hover'); // Ativa o brilho definido no map.js
+                        point.graphic.toFront(); // Traz para frente (para a borda não ficar cortada)
                     } else {
-                        point.setState('inactive'); // Apaga os outros (dim)
+                        point.setState('inactive'); // Define a opacidade 0.5 (que configurámos no map.js)
                     }
                 });
 
             } else if (event.data.type === 'resetMap') {
                 // Reseta todos os pontos para o estado normal
                 chart.series[0].points.forEach(point => {
-                    point.setState(''); 
+                    point.setState('normal'); // Força o estado normal (100% opacidade)
                 });
             }
         });
-     </script>
+    </script>
 
 </body>
 </html>
