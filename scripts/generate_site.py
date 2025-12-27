@@ -1,12 +1,10 @@
 import json
 import os
 
-# --- CONFIGURAÇÃO DE CAMINHOS (CORREÇÃO) ---
-# Descobre onde este script está e define a pasta PAIO (Raiz) como base
+# --- CONFIGURAÇÃO DE CAMINHOS ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(SCRIPT_DIR) # Sobe um nível para a raiz
+ROOT_DIR = os.path.dirname(SCRIPT_DIR) 
 
-# Define caminhos absolutos para garantir que gravamos no sítio certo
 DATA_DIR = os.path.join(ROOT_DIR, 'scripts/data')
 OUTPUT_MAP_JS = os.path.join(ROOT_DIR, 'map.js')
 OUTPUT_ARMY_HTML = os.path.join(ROOT_DIR, 'army_code.html')
@@ -32,10 +30,8 @@ print(f"📖 Lidos {len(servers)} servidores e {len(armies)} exércitos.")
 # ==========================================
 print(f"⚙️ A gerar {OUTPUT_MAP_JS}...")
 
-# Mapa de cores simples para injeção no JS
 army_colors = {name: data['color'] for name, data in armies.items()}
 
-# A lógica JavaScript que será escrita no ficheiro
 js_content = f"""
 // GERADO AUTOMATICAMENTE POR generate_site.py
 // NÃO EDITAR DIRETAMENTE - EDITE data/servers.json
@@ -159,7 +155,7 @@ def generate_html_list(items, filename, title_col="name", val_col="value"):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(html)
 
-# 1. LISTA DE FORÇAS ATIVAS (Calculado automaticamente do mapa)
+# 1. LISTA DE FORÇAS ATIVAS
 land_counts = {}
 for s in servers:
     owner = s.get('controller')
@@ -172,10 +168,10 @@ sorted_forces = sorted(
 )
 generate_html_list(sorted_forces, OUTPUT_ARMY_HTML)
 
-# 2. LISTA DE RIQUEZA (Valor manual do JSON)
+# 2. LISTA DE RIQUEZA (AGORA COM TODOS)
 sorted_wealth = sorted(
     [{'name': k, 'value': f"${v.get('wealth', 0)}", 'color': v['color'], 'raw_wealth': v.get('wealth', 0)} 
-     for k, v in armies.items() if v.get('wealth', 0) > 0],
+     for k, v in armies.items()], # REMOVI O FILTRO
     key=lambda x: x['raw_wealth'], reverse=True
 )
 generate_html_list(sorted_wealth, OUTPUT_WEALTH_HTML)
