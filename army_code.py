@@ -21,7 +21,7 @@ search_terms = {
 with open('map.js', 'r') as file:
     content = file.read()
 
-# CSS INJETADO DIRETAMENTE (Cool Boxes Garantidas)
+# CSS e JAVASCRIPT INJETADOS DIRETAMENTE
 html_content = """
 <!DOCTYPE html>
 <html>
@@ -48,6 +48,7 @@ html_content = """
         backdrop-filter: blur(4px);
         transition: transform 0.2s;
         box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        cursor: pointer;
     }
     .army-card:hover {
         transform: translateX(5px);
@@ -73,10 +74,10 @@ html_content = """
 <body>
 """
 
+# Geração dos cartões
 for term, color in search_terms.items():
     count = content.lower().count(term.lower()) - 1
     if count >= 1:
-        # Usa o CSS injetado acima
         html_content += f'''
         <div class="army-card" style="border-left-color: {color};">
             <span class="army-name">{term}</span>
@@ -84,8 +85,31 @@ for term, color in search_terms.items():
         </div>
         '''
 
-html_content += "</body></html>"
+# Adicionar o Script de Comunicação no final do HTML gerado
+html_content += """
+<script>
+    // Seleciona todos os cartões gerados
+    const cards = document.querySelectorAll('.army-card');
+    
+    cards.forEach(card => {
+        // Quando o rato entra no cartão
+        card.addEventListener('mouseenter', () => {
+            const name = card.querySelector('.army-name').innerText;
+            // Envia mensagem para o index.html (janela pai)
+            window.parent.postMessage({ type: 'hoverArmy', army: name }, '*');
+        });
+
+        // Quando o rato sai do cartão
+        card.addEventListener('mouseleave', () => {
+            // Envia mensagem para limpar o mapa
+            window.parent.postMessage({ type: 'resetMap' }, '*');
+        });
+    });
+</script>
+</body>
+</html>
+"""
 
 with open("army_code.html", 'w') as file:
     file.write(html_content)
-print("army_code.html fixed with embedded CSS.")
+print("army_code.html fixed with embedded CSS and Interaction Script.")
