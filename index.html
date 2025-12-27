@@ -52,7 +52,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="viewport" content="width=1280, user-scalable=yes">
+
     <title>Club Penguin Armies: The Map</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,17 +82,14 @@
 
     <div class="dashboard-container">
         
-        <!-- O MAPA (Com a Grid no fundo definida no CSS) -->
         <div class="map-wrapper">
             <div class="map-header">
                 <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
             </div>
 
-            <!-- Container do Highcharts -->
             <div id="container" style="width:100%; height:100%;"></div>
         </div>
 
-        <!-- A SIDEBAR (Com o Embed) -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Active Forces</h2>
@@ -118,7 +117,7 @@
     </div>
 
     <script src="map.js"></script>
-   
+    
     <script>
         window.addEventListener('message', function(event) {
             // Verificar se o gráfico existe e está carregado
